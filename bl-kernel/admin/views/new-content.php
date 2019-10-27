@@ -434,6 +434,11 @@ $(document).ready(function() {
 			$("#jseditor").val($('#jseditor').val()+'<img src="'+filename+'" alt="">');
 		};
 	}
+	if (typeof editorInsertThumbnail != "function") {
+		window.editorInsertThumbnail = function(thumbnail, image){
+			$("#jseditor").val($('#jseditor').val()+'<a href="'+image+'"><img src="'+thumbnail+'" alt=""></a>');
+		};
+	}
 
 	// Button switch
 	$("#jsbuttonSwitch").on("click", function() {

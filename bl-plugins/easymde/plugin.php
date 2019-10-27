@@ -84,6 +84,13 @@ return <<<EOF
 		easymde.value(text + "![$langImage]("+filename+")" + "\\n");
 		easymde.codemirror.refresh();
 	}
+	// Insert the thumbnail for an image at the cursor position, with 
+	// a link to the original image
+	function editorInsertThumbnail(thumbnail, image) {
+		var text = easymde.value();
+		easymde.value(text + "[![$langImage]("+thumbnail+")]("+image+")" + "\\n");
+		easymde.codemirror.refresh();
+	}
 
 	// Returns the content of the editor
 	// Function required for Bludit

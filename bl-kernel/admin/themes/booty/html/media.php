@@ -109,11 +109,12 @@ function displayFiles(files) {
 			var image = "<?php echo PAGE_IMAGES_URL; ?>"+filename;
 
 			tableRow = '<tr id="js'+filename+'">'+
-					'<td style="width:80px"><img class="img-thumbnail" alt="200x200" src="'+thumbnail+'" style="width: 50px; height: 50px;"><\/td>'+
+					'<td style="width:80px"><img class="img-thumbnail" alt="200x200" src="'+thumbnail+'" style="width: 50px;"><\/td>'+
 					'<td class="information">'+
 						'<div class="text-primary pb-2">'+filename+'<\/div>'+
 						'<div>'+
 							'<a href="#" class="mr-3 text-secondary" onClick="editorInsertMedia(\''+image+'\'); closeMediaManager();"><i class="fa fa-plus"></i><?php $L->p('Insert') ?><\/a>'+
+							'<a href="#" class="mr-3 text-secondary" onClick="editorInsertThumbnail(\''+thumbnail+'\',\''+image+'\'); closeMediaManager();"><i class="fa fa-plus"></i><?php $L->p('Insert thumbnail') ?><\/a>'+
 							'<a href="#" class="text-secondary" onClick="setCoverImage(\''+filename+'\'); closeMediaManager();"><i class="fa fa-square-o"></i><?php $L->p('Set as cover image') ?><\/button>'+
 							'<a href="#" class="float-right text-danger" onClick="deleteMedia(\''+filename+'\')"><i class="fa fa-trash-o"></i><?php $L->p('Delete') ?><\/a>'+
 						'<\/div>'+

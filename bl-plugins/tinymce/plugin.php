@@ -85,6 +85,11 @@ $html = <<<EOF
 	function editorInsertMedia(filename) {
 		tinymce.activeEditor.insertContent("<img src=\""+filename+"\" alt=\"\">");
 	}
+	// Insert the thumbnail for an image at the cursor 
+	// position, with a link to the original image
+	function editorInsertThumbnail(thumbnail, image) {
+		tinymce.activeEditor.insertContent("<a href=\""+image+"\"><img src=\""+thumbnail+"\" alt=\"$langImage\"></a>");
+	}
 
 	// Returns the content of the editor
 	// Function required for Bludit
