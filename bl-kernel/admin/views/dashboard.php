@@ -1,6 +1,6 @@
 <div id="dashboard" class="container">
 	<div class="row">
-		<div class="col-md-7 d-none d-sm-block">
+		<div class="col-md-7">
 
 			<!-- Good message -->
 			<div>
@@ -27,7 +27,7 @@
 			</div>
 
 			<!-- Quick Links -->
-			<div class="container border-bottom pb-5">
+			<div class="container border-bottom pb-5" id="jsclippyContainer">
 
 				<div class="row">
 					<div class="col">
@@ -46,6 +46,7 @@
 					width: "100%",
 					theme: "bootstrap4",
 					minimumInputLength: 2,
+					dropdownParent: "#jsclippyContainer",
 					ajax: {
 						url: HTML_PATH_ADMIN_ROOT+"ajax/clippy",
 						data: function (params) {
@@ -66,8 +67,8 @@
 							html += '<div class="search-suggestion">';
 							html += '<div class="search-suggestion-item">'+data.text+' <span class="badge badge-pill badge-light">'+data.type+'</span></div>';
 							html += '<div class="search-suggestion-options">';
-							html += '<a target="_blank" href="'+DOMAIN_PAGES+data.id+'">View</a>';
-							html += '<a class="ml-2" href="'+DOMAIN_ADMIN+'edit-content/'+data.id+'">Edit</a>';
+							html += '<a target="_blank" href="'+DOMAIN_PAGES+data.id+'"><?php $L->p('view') ?></a>';
+							html += '<a class="ml-2" href="'+DOMAIN_ADMIN+'edit-content/'+data.id+'"><?php $L->p('edit') ?></a>';
 							html += '</div></div>';
 						}
 

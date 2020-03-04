@@ -264,4 +264,36 @@ class Filesystem {
 	public static function extension($file) {
 		return pathinfo($file, PATHINFO_EXTENSION);
 	}
+
+	/**
+	 * Get Size of file or directory in bytes
+	 * @param  [string] $fileOrDirectory
+	 * @return [int|bool]                  [bytes or false on error]
+	 */
+	public static function getSize($fileOrDirectory) {
+		// Files
+		if (is_file($fileOrDirectory)) {
+			return filesize($fileOrDirectory);
+		}
+		// Directories
+		if (file_exists($fileOrDirectory)) {
+		    $size = 0;
+		    foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($fileOrDirectory, FilesystemIterator::SKIP_DOTS)) as $file){
+				try {
+					$size += $file->getSize();
+				} catch (Exception $e) {
+					// SplFileInfo::getSize RuntimeException will be thrown on broken symlinks/errors
+				}
+		    }
+		    return $size;
+		}
+		return false;
+	}
+
+	public static function bytesToHumanFileSize($bytes, $decimals = 2) {
+	    $size = array('B','kB','MB','GB','TB','PB','EB','ZB','YB');
+	    $factor = floor((strlen($bytes) - 1) / 3);
+	    return sprintf("%.{$decimals}f ", $bytes / pow(1024, $factor)) . @$size[$factor];
+	}
+
 }
