@@ -27,6 +27,7 @@ class Filesystem {
 	// $chunk = amount of chunks, FALSE if you don't want to chunk
 	public static function listFiles($path, $regex='*', $extension='*', $sortByDate=false, $chunk=false)
 	{
+		error_log($path.$regex.'.'.$extension);
 		$files = glob($path.$regex.'.'.$extension);
 
 		if (empty($files)) {
@@ -174,9 +175,9 @@ class Filesystem {
 			foreach ($files as $file) {
 				$file = realpath($file);
 				if (is_dir($file)) {
-					$zip->addEmptyDir(str_replace($source, '', $file));
+					$zip->addEmptyDir(ltrim(str_replace($source, '', $file), "/\\"));
 				} elseif (is_file($file)) {
-					$zip->addFromString(str_replace($source, '', $file), file_get_contents($file));
+					$zip->addFromString(ltrim(str_replace($source, '', $file), "/\\"), file_get_contents($file));
 				}
 			}
 		} elseif (is_file($source)) {
@@ -294,6 +295,20 @@ class Filesystem {
 	    $size = array('B','kB','MB','GB','TB','PB','EB','ZB','YB');
 	    $factor = floor((strlen($bytes) - 1) / 3);
 	    return sprintf("%.{$decimals}f ", $bytes / pow(1024, $factor)) . @$size[$factor];
+	}
+
+	/*
+	 | Returns the mime type of the file
+	 | Example:
+	 |	@file	/home/diego/dog.jpg
+	 |	@return image/jpeg
+         |
+         | @file	string	Full path of the file
+         |
+         | @return	string
+         */
+	public static function mimeType($file) {
+		return mime_content_type($file);
 	}
 
 }

@@ -136,6 +136,9 @@ class pluginAPI extends Plugin {
 		// (GET) /api/pages/<key>
 		elseif ( ($method==='GET') && ($parameters[0]==='pages') && !empty($parameters[1]) ) {
 			$pageKey = $parameters[1];
+			if (isset($parameters[2])) {
+				$pageKey = $parameters[1].'/'.$parameters[2];
+			}
 			$data = $this->getPage($pageKey);
 		}
 		// (PUT) /api/pages/<key>
@@ -190,6 +193,11 @@ class pluginAPI extends Plugin {
 		elseif ( ($method==='GET') && ($parameters[0]==='users') && !empty($parameters[1]) ) {
 			$username = $parameters[1];
 			$data = $this->getUser($username);
+		}
+		// (GET) /api/files/<page-key>
+		elseif ( ($method==='GET') && ($parameters[0]==='files') && !empty($parameters[1]) ) {
+			$pageKey = $parameters[1];
+			$data = $this->getFiles($pageKey);
 		}
 		else {
 			$this->response(401, 'Unauthorized', array('message'=>'Access denied or invalid endpoint.'));
@@ -665,6 +673,42 @@ class pluginAPI extends Plugin {
 			'status'=>'0',
 			'message'=>'Users profiles.',
 			'data'=>$data
+		);
+	}
+
+	/*
+	 | Returns all files uploaded for a specific page, includes any type of file.
+	 |
+	 | @return	array
+         */
+	private function getFiles($pageKey)
+	{
+		$chunk = false;
+		$sortByDate = true;
+		$path = PATH_UPLOADS_PAGES.$pageKey.DS;
+		$listFiles = Filesystem::listFiles($path, '*', '*', $sortByDate, $chunk);
+
+		$files = array();
+		foreach ($listFiles as $file) {
+			$info = array('thumbnail'=>'');
+			$info['file'] = $file;
+			$info['filename'] = basename($file);
+			$info['mime'] = Filesystem::mimeType($file);
+			$info['size'] = Filesystem::getSize($file);
+
+			// Check if thumbnail exists for the file
+			$thumbnail = $path.'thumbnails'.DS.$info['filename'];
+			if (Filesystem::fileExists($thumbnail)) {
+				$info['thumbnail'] = $thumbnail;
+			}
+
+			array_push($files, $info);
+		}
+
+		return array(
+			'status'=>'0',
+			'message'=>'Files for the page key: '.$pageKey,
+			'data'=>$files
 		);
 	}
 }
